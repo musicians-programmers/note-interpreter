@@ -5,6 +5,7 @@ import pandas as pd
 from midiutil.MidiFile import MIDIFile
 import subprocess
 
+
 def locate_symbol(image, count_of_iterations, offset, type, x_coordinate, y_coordinate, widths, heights, type_of_symbol, threshold):
     for i in range(count_of_iterations):  # note4/note8
         template = cv2.imread('templates/' + str(i+offset) + '.png', 0)
@@ -27,9 +28,9 @@ def create_table(img):
     heights = []
     type_of_symbol = []
 
-    locate_symbol(img, 9, 80, 'staff', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.85)
+    locate_symbol(img, 8, 80, 'staff', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.85)
     locate_symbol(img, 7, 0, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.79)
-    locate_symbol(img, 9, 20, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.8)
+    locate_symbol(img, 10, 20, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.8)
     locate_symbol(img, 7, 40, 'flat', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.88)
     locate_symbol(img, 2, 50, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.8)
 
@@ -119,13 +120,13 @@ def find_note_height(df):
             y_start = df.loc[ind, 'y']
             break
 
-    middle = y_start + int(height / 2)
-    step = int(height / 24)
-    middles = []
-    middles.append(middle)
+    middle = y_start + round(height / 2)
+    step = round(height / 24)
+
+    middles = [middle]
     for i in range(7):
-        middles.append(middle + 10 * (i + 1))
-        middles.append(middle - 10 * (i + 1))
+        middles.append(middle + 2 * step * (i + 1))
+        middles.append(middle - 2 * step * (i + 1))
     print(len(middles))
     middles.sort()
     note_height = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -179,9 +180,11 @@ def find_note_height(df):
     print(df)
     return df
 
+
 def open_file(path):
     cmd = {'linux': 'eog', 'win32': 'explorer', 'darwin': 'open'}[sys.platform]
     subprocess.run([cmd, path])
+
 
 def to_midi(df):
     indexes_for_drop = df[df['symbol'] == 'staff'].index
@@ -201,24 +204,26 @@ def to_midi(df):
     midi.addTempo(track, time, 140)
 
     for i in range(df['x'].size):
-        duration = 0
-        if df.loc[i, 'symbol'] == 'note2':
-            duration = 2
-        elif df.loc[i, 'symbol'] == 'note4':
-            duration = 1
-        elif df.loc[i, 'symbol'] == 'note8':
-            duration = 0.5
-        pitch = df.loc[i, 'notes_midi']
-        midi.addNote(track, channel, pitch, time, duration, volume)
-        time += duration
+        if df.loc[i, 'symbol'] == 'note2' or df.loc[i, 'symbol'] == 'note4' or df.loc[i, 'symbol'] == 'note8':
+            duration = 0
+            if df.loc[i, 'symbol'] == 'note2':
+                duration = 2
+            elif df.loc[i, 'symbol'] == 'note4':
+                duration = 1
+            elif df.loc[i, 'symbol'] == 'note8':
+                duration = 0.5
+            pitch = df.loc[i, 'notes_midi']
+            midi.addNote(track, channel, pitch, time, duration, volume)
+            time += duration
 
     binfile = open("output.mid", 'wb')
     midi.writeFile(binfile)
     binfile.close()
     open_file('output.mid')
 
+
 if __name__ == '__main__':
-    img_rgb = cv2.imread('samples/lost1.png')
+    img_rgb = cv2.imread('samples/copy.png')
 
     img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
     print(img_gray.shape)
