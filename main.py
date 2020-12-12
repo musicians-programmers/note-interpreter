@@ -31,8 +31,8 @@ def create_table(img):
     locate_symbol(img, 8, 80, 'staff', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.85)
     locate_symbol(img, 7, 0, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.79)
     locate_symbol(img, 10, 20, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.8)
-    locate_symbol(img, 7, 40, 'flat', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.88)
-    locate_symbol(img, 2, 50, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.8)
+    locate_symbol(img, 8, 40, 'flat', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.88)
+    locate_symbol(img, 6, 50, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.8)
 
     d = {'x': x_coordinate, 'y': y_coordinate, 'width': widths, 'height': heights, 'symbol': type_of_symbol}
     df = pd.DataFrame(data=d)
@@ -106,6 +106,8 @@ def create_table(img):
                 df.loc[ind, 'symbol'] = 'note8'
         elif df.loc[ind, 'symbol'] == 'note2':
             cv2.rectangle(img_rgb, (x, y), (x + width, y + height), (0, 255, 255), 2)
+        else:
+            cv2.rectangle(img_rgb, (x, y), (x + width, y + height), (255, 130, 0), 2)
     cv2.imwrite('res.png', img_rgb)
     return df
 
@@ -121,7 +123,7 @@ def find_note_height(df):
             break
 
     middle = y_start + round(height / 2)
-    step = round(height / 24)
+    step = height / 24
 
     middles = [middle]
     for i in range(7):
@@ -130,17 +132,17 @@ def find_note_height(df):
     print(len(middles))
     middles.sort()
     note_height = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-    note_meaning = ['h5', 'a5', 'g5', 'f5', 'e5', 'd5', 'c5', 'h4', 'a4', 'g4', 'f4', 'e4', 'd4', 'c4', 'h3']
+    note_meaning = ['H5', 'A5', 'G5', 'F5', 'E5', 'D5', 'C5', 'H4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4', 'H3']
     note_for_midi = [83, 81, 79, 77, 76, 74, 72, 71, 69, 67, 65, 64, 62, 60, 59]
 
     print(len(note_height))
     note_classifier = {'middles': middles, 'note_height': note_height, 'note_meaning': note_meaning, 'note_midi': note_for_midi}
 
     # check is everything ok with notes height
-    # x = 1340
+    # x = 500
     # for i in range(len(middles)):
     #     y = middles[i]
-    #     cv2.rectangle(img_rgb, (x + 20 * i, y - step), (x + 20 * i + 10, y + step), (0, 0, 150), 2)
+    #     cv2.rectangle(img_rgb, (x + 20 * i, int(y - step)), (x + 20 * i + 10, int(y + step)), (0, 0, 150), 2)
 
     cv2.imwrite('result.png', img_rgb)
     classifier = pd.DataFrame(data=note_classifier)
@@ -148,7 +150,7 @@ def find_note_height(df):
     print(classifier)
     note_centers =[]
     for ind in range(df['x'].size):
-        center = df.loc[ind, 'y'] + int(df.loc[ind, 'height'] / 2)
+        center = df.loc[ind, 'y'] + df.loc[ind, 'height'] / 2
         note_centers.append(center)
     df['centers'] = note_centers
     print('Dataframe with centers')
@@ -157,9 +159,9 @@ def find_note_height(df):
     notes = []
     note_midi = []
     for i in range(df['x'].size):
-        if df.loc[i, 'symbol'] == 'staff':
+        if df.loc[i, 'symbol'] == 'staff' or df.loc[i, 'symbol'] == 'pause1' or df.loc[i, 'symbol'] == 'pause2' or df.loc[i, 'symbol'] == 'pause4' or df.loc[i, 'symbol'] == 'pause8':
             notes.append('-')
-            note_midi.append(0)
+            note_midi.append(126)
         else:
             center = df.loc[i, 'centers']
             flag = 0
@@ -186,6 +188,13 @@ def open_file(path):
     subprocess.run([cmd, path])
 
 
+def search(list, elem):
+    for i in range(len(list)):
+        if list[i] == elem:
+            return True
+    return False
+
+
 def to_midi(df):
     indexes_for_drop = df[df['symbol'] == 'staff'].index
     df.drop(indexes_for_drop, inplace=True)
@@ -203,8 +212,34 @@ def to_midi(df):
     midi.addTrackName(track, time, "Track")
     midi.addTempo(track, time, 140)
 
+    flats = []
+    sharps = []
+    for i in range(df['x'].size): # key signs
+        if df.loc[i, 'symbol'] == 'flat':
+            flats.append(df.loc[i, 'notes_midi'])
+            flats.append(df.loc[i, 'notes_midi'] - 12)
+            flats.append(df.loc[i, 'notes_midi'] + 12)
+        elif df.loc[i, 'symbol'] == 'sharp':
+            sharps.append(df.loc[i, 'notes_midi'])
+            sharps.append(df.loc[i, 'notes_midi'] - 12)
+            sharps.append(df.loc[i, 'notes_midi'] + 12)
+        elif df.loc[i, 'symbol'] == 'note2' or df.loc[i, 'symbol'] == 'note4' or df.loc[i, 'symbol'] == 'note8':
+            break
+
     for i in range(df['x'].size):
         if df.loc[i, 'symbol'] == 'note2' or df.loc[i, 'symbol'] == 'note4' or df.loc[i, 'symbol'] == 'note8':
+            if search(flats, df.loc[i, 'notes_midi']):
+                df.loc[i, 'notes'] = 'b' + df.loc[i, 'notes']
+                df.loc[i, 'notes_midi'] -= 1
+            if search(sharps, df.loc[i, 'notes_midi']):
+                df.loc[i, 'notes'] = '#' + df.loc[i, 'notes']
+                df.loc[i, 'notes_midi'] += 1
+
+    print('Dataframe for play')
+    print(df)
+
+    for i in range(df['x'].size):
+        if df.loc[i, 'symbol'] != 'staff' and df.loc[i, 'symbol'] != 'sharp' and df.loc[i, 'symbol'] != 'flat':
             duration = 0
             if df.loc[i, 'symbol'] == 'note2':
                 duration = 2
@@ -212,6 +247,15 @@ def to_midi(df):
                 duration = 1
             elif df.loc[i, 'symbol'] == 'note8':
                 duration = 0.5
+            # still can't find pauses :(
+            # elif df.loc[i, 'symbol'] == 'pause1':
+            #     duration = 4
+            # elif df.loc[i, 'symbol'] == 'pause2':
+            #     duration = 2
+            # elif df.loc[i, 'symbol'] == 'pause4':
+            #     duration = 1
+            # elif df.loc[i, 'symbol'] == 'pause8':
+            #     duration = 0.5
             pitch = df.loc[i, 'notes_midi']
             midi.addNote(track, channel, pitch, time, duration, volume)
             time += duration
@@ -223,7 +267,7 @@ def to_midi(df):
 
 
 if __name__ == '__main__':
-    img_rgb = cv2.imread('samples/copy.png')
+    img_rgb = cv2.imread('samples/from_dataset.png')
 
     img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
     print(img_gray.shape)
