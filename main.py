@@ -7,7 +7,7 @@ import subprocess
 
 
 def locate_symbol(image, count_of_iterations, offset, type, x_coordinate, y_coordinate, widths, heights, type_of_symbol, threshold):
-    for i in range(count_of_iterations):  # note4/note8
+    for i in range(count_of_iterations):
         template = cv2.imread('templates/' + str(i+offset) + '.png', 0)
         w, h = template.shape[::-1]
 
@@ -33,6 +33,12 @@ def create_table(img):
     locate_symbol(img, 10, 20, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.8)
     locate_symbol(img, 8, 40, 'flat', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.88)
     locate_symbol(img, 6, 50, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.8)
+
+    locate_symbol(img, 1, 100, 'pause1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.883)
+    locate_symbol(img, 1, 110, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.83)
+    locate_symbol(img, 1, 111, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.7)
+    locate_symbol(img, 2, 120, 'pause4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.7)
+    locate_symbol(img, 2, 130, 'pause8', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 0.8)
 
     d = {'x': x_coordinate, 'y': y_coordinate, 'width': widths, 'height': heights, 'symbol': type_of_symbol}
     df = pd.DataFrame(data=d)
@@ -247,15 +253,14 @@ def to_midi(df):
                 duration = 1
             elif df.loc[i, 'symbol'] == 'note8':
                 duration = 0.5
-            # still can't find pauses :(
-            # elif df.loc[i, 'symbol'] == 'pause1':
-            #     duration = 4
-            # elif df.loc[i, 'symbol'] == 'pause2':
-            #     duration = 2
-            # elif df.loc[i, 'symbol'] == 'pause4':
-            #     duration = 1
-            # elif df.loc[i, 'symbol'] == 'pause8':
-            #     duration = 0.5
+            elif df.loc[i, 'symbol'] == 'pause1':
+                duration = 4
+            elif df.loc[i, 'symbol'] == 'pause2':
+                duration = 2
+            elif df.loc[i, 'symbol'] == 'pause4':
+                duration = 1
+            elif df.loc[i, 'symbol'] == 'pause8':
+                duration = 0.5
             pitch = df.loc[i, 'notes_midi']
             midi.addNote(track, channel, pitch, time, duration, volume)
             time += duration
@@ -267,7 +272,7 @@ def to_midi(df):
 
 
 if __name__ == '__main__':
-    img_rgb = cv2.imread('samples/from_dataset.png')
+    img_rgb = cv2.imread('samples/from_dataset5.png')
 
     img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
     print(img_gray.shape)
