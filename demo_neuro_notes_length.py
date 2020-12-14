@@ -7,7 +7,7 @@ import numpy as np
 if __name__ == '__main__':
     model = load_model('notes_length.h5')
 
-    notes = notes_from_image('datasets/made_from_primus_dataset/train/000051763-1_1_1/000051763-1_1_1.png')  # path to picture with notes
+    notes = notes_from_image('samples/picture_1.png')  # path to picture with notes
     prediction = model.predict(notes)
 
     for i in prediction:
