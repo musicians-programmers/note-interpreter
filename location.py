@@ -4,7 +4,7 @@ import cv2
 
 
 def find_scale(image, count_of_iterations, offset, symbol_type, x_coordinate, y_coordinate, widths, heights,
-               symbol_types, start_percent, stop_percent, threshold):
+               symbol_types, start_percent, stop_percent, threshold, sub_path):
     image_width, image_height = image.shape[::-1]
     best_location_count = -1
     best_locations = []
@@ -19,7 +19,7 @@ def find_scale(image, count_of_iterations, offset, symbol_type, x_coordinate, y_
         average_width = 0
         counter = 0
         for i in range(count_of_iterations):
-            template = cv2.imread('templates/' + str(i + offset) + '.png', 0)
+            template = cv2.imread(sub_path + 'templates/' + str(i + offset) + '.png', 0)
             w, h = template.shape[::-1]
             if scale * h > image_height:
                 break
@@ -73,7 +73,7 @@ def find_scale(image, count_of_iterations, offset, symbol_type, x_coordinate, y_
 #             symbol_types.append(symbol_type)
 
 
-def create_table(gray_img, color_img):
+def create_table(gray_img, color_img, sub_path = ''):
     x_coordinate = []
     y_coordinate = []
     widths = []
@@ -81,119 +81,107 @@ def create_table(gray_img, color_img):
     type_of_symbol = []
 
     scale = find_scale(gray_img, 8, 80, 'staff', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 40, 150,
-                       0.82)  # 0.8
+                       0.82, sub_path)  # 0.8
     low_scale = round(100 * scale - 5)
     high_scale = round(100 * scale + 5)
     # NOTE 4 OR NOTE 8
-    # find_scale(gray_img, 2, 0, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 150, 0.8) #0.7
-    # find_scale(gray_img, 6, 10, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 150, 0.73)
+    # find_scale(gray_img, 2, 0, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 150, 0.8, sub_path) #0.7
+    # find_scale(gray_img, 6, 10, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 150, 0.73, sub_path)
     find_scale(gray_img, 1, 11, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.7)  # 0.6
+               high_scale, 0.7, sub_path)  # 0.6
     find_scale(gray_img, 1, 14, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.7)  # 0.6
+               high_scale, 0.7, sub_path)  # 0.6
     find_scale(gray_img, 1, 15, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.71)  # 0.77 была закоменчена, возможно выдает лишние ноты 0,73 0.8 - много
+               high_scale, 0.68, sub_path)  # 0.77 была закоменчена, возможно выдает лишние ноты 0,73 0.8 - много
     find_scale(gray_img, 1, 16, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.8)  # была закоменчена, возможно выдает лишние ноты 0,85
+               high_scale, 0.8, sub_path)  # была закоменчена, возможно выдает лишние ноты 0,85
     find_scale(gray_img, 1, 18, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.85)  # 0.7
+               high_scale, 0.85, sub_path)  # 0.7
 
     # NOTE 2
     find_scale(gray_img, 1, 20, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.65)  # 0.65
+               high_scale, 0.65, sub_path)  # 0.65
     find_scale(gray_img, 1, 21, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.77)
+               high_scale, 0.77, sub_path)
     find_scale(gray_img, 1, 22, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.77)
+               high_scale, 0.77, sub_path)
     find_scale(gray_img, 1, 23, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.7)
+               high_scale, 0.7, sub_path)
     find_scale(gray_img, 1, 24, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.75)  # 0.73 0.77
+               high_scale, 0.75, sub_path)  # 0.73 0.77
     find_scale(gray_img, 1, 25, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.77)
+               high_scale, 0.77, sub_path)
     find_scale(gray_img, 1, 26, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.77)
+               high_scale, 0.77, sub_path)
     find_scale(gray_img, 1, 27, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.77)
+               high_scale, 0.77, sub_path)
     find_scale(gray_img, 1, 28, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.77)
+               high_scale, 0.77, sub_path)
     find_scale(gray_img, 1, 29, 'note2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.77)
+               high_scale, 0.77, sub_path)
 
     # NOTE 1
     find_scale(gray_img, 1, 30, 'note1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.78)  # 0.77
+               high_scale, 0.78, sub_path)  # 0.77
     # find_scale(gray_img, 1, 31, 'note1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 140,
-    #            0.8)  # 0.77
+    #            0.8, sub_path)  # 0.77
     find_scale(gray_img, 1, 32, 'note1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.68)  # 0.77
+               high_scale, 0.68, sub_path)  # 0.77
     # find_scale(gray_img, 1, 33, 'note1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-    #            high_scale, 0.7)  # 0.77 0.73 0.65 0,62 - лишние
+    #            high_scale, 0.7, sub_path)  # 0.77 0.73 0.65 0,62 - лишние
     find_scale(gray_img, 1, 34, 'note1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.75)  # 0.77 0.73 0.65 0,62 - лишние
+               high_scale, 0.75, sub_path)  # 0.77 0.73 0.65 0,62 - лишние
     # find_scale(gray_img, 1, 35, 'note1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-    #            high_scale, 0.85)  # 0.77 0.73 0.65 0,62 - лишние
+    #            high_scale, 0.85, sub_path)  # 0.77 0.73 0.65 0,62 - лишние
 
     # FLAT
     find_scale(gray_img, 2, 40, 'flat', x_coordinate, y_coordinate, widths, heights, type_of_symbol,
-               low_scale, high_scale, 0.75)  # 0.88
+               low_scale, high_scale, 0.75, sub_path)  # 0.88
     find_scale(gray_img, 1, 42, 'flat', x_coordinate, y_coordinate, widths, heights, type_of_symbol,
-               low_scale, high_scale, 0.75)  # 0.8 0,78
+               low_scale, high_scale, 0.75, sub_path)  # 0.8 0,78
     find_scale(gray_img, 1, 43, 'flat', x_coordinate, y_coordinate, widths, heights, type_of_symbol,
-               low_scale, high_scale, 0.75)  # 0.8
+               low_scale, high_scale, 0.75, sub_path)  # 0.8
     # find_scale(gray_img, 1, 44, 'flat', x_coordinate, y_coordinate, widths, heights, type_of_symbol,
-    #            50, 150, 0.77) # 0.7 0,73 не использовать! На ключе появляются лишние бемоли
+    #            50, 150, 0.77, sub_path) # 0.7 0,73 не использовать! На ключе появляются лишние бемоли
 
     # SHARP
     find_scale(gray_img, 1, 50, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.75)  # 0.74 works good
+               high_scale, 0.75, sub_path)  # 0.74 works good
     find_scale(gray_img, 1, 51, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.76)  # 0.74 works good
+               high_scale, 0.76, sub_path)  # 0.74 works good
     # find_scale(gray_img, 1, 52, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 40, 150,
-    #            0.7)  # 0.74 лишние диезы
+    #            0.7, sub_path)  # 0.74 лишние диезы
     find_scale(gray_img, 1, 53, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.9)  # 0.74 works good
+               high_scale, 0.9, sub_path)  # 0.74 works good
     find_scale(gray_img, 1, 54, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.77)  # 0.74
+               high_scale, 0.77, sub_path)  # 0.74
     find_scale(gray_img, 1, 55, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.77)  # 0.74 0.77
+               high_scale, 0.77, sub_path)  # 0.74 0.77
     find_scale(gray_img, 2, 56, 'sharp', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.765)  # 0.74 0.8
+               high_scale, 0.765, sub_path)  # 0.74 0.8
 
     # PAUSE 1
     find_scale(gray_img, 1, 100, 'pause1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.9)  # 0.85 0.88 0.878
+               high_scale, 0.9, sub_path)  # 0.85 0.88 0.878
 
     # PAUSE 2
-    # find_scale(gray_img, 1, 110, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 140, 0.65) #0.65 в lost1 - лишние паузы
+    # find_scale(gray_img, 1, 110, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 140, 0.65, sub_path) #0.65 в lost1 - лишние паузы
     find_scale(gray_img, 1, 111, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.8)  # 0.8 0.7 0.75 0.768 0.79 - лишние
+               high_scale, 0.8, sub_path)  # 0.8 0.7 0.75 0.768 0.79 - лишние
     find_scale(gray_img, 1, 112, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.8) # 0.83
+               high_scale, 0.8, sub_path) # 0.83
     # find_scale(gray_img, 1, 113, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-    #            high_scale, 0.8)  # 0.83
+    #            high_scale, 0.8, sub_path)  # 0.83
 
     # PAUSE 4
     find_scale(gray_img, 1, 120, 'pause4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale,
-               0.6)  # 0.55 0.56 0.565 0.58
+               high_scale, 0.6, sub_path)  # 0.55 0.56 0.565 0.58
     find_scale(gray_img, 1, 121, 'pause4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.7)
+               high_scale, 0.7, sub_path)
 
     # PAUSE 8
     find_scale(gray_img, 2, 130, 'pause8', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.8)
+               high_scale, 0.8, sub_path)
 
     d = {'x': x_coordinate, 'y': y_coordinate, 'width': widths, 'height': heights, 'symbol': type_of_symbol}
     df = pd.DataFrame(data=d)

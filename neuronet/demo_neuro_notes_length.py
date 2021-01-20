@@ -1,6 +1,6 @@
 from tensorflow.keras.models import load_model
-from neuro_notes_length import notes_from_image
-from neuro_notes_length import note_durations
+from neuronet.neuro_notes_length import notes_from_image
+from neuronet.neuro_notes_length import note_durations
 import numpy as np
 
 
