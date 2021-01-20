@@ -20,11 +20,10 @@ if __name__ == '__main__':
         notes_from_picture = notes_from_image(path_to_dataset + subdir + '/' + subdir + '.png')
         notes_from_music = notes_from_midi(path_to_dataset + subdir + '/' + subdir + '.mid',
                                            note_durations)
-        if len(notes_from_picture) == len(notes_from_music):
-            for pict_note in notes_from_picture:
-                notes_from_all_pictures.append(pict_note)
-            for music_note in notes_from_music:
-                notes_from_all_music_files.append(music_note)
+        for pict_note in notes_from_picture:
+            notes_from_all_pictures.append(pict_note)
+        for music_note in notes_from_music:
+            notes_from_all_music_files.append(music_note)
 
     notes_from_all_pictures = np.array(notes_from_all_pictures) / 255.0
     notes_from_all_music_files = np.array(notes_from_all_music_files)
