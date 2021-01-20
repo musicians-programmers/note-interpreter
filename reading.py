@@ -1,5 +1,7 @@
 import cv2
 import pandas as pd
+from neuronet.neuro_notes_length import image_increase_height, choose_notes, note_durations
+from tensorflow.keras.models import load_model
 
 
 def find_note_height(img, df):
@@ -73,3 +75,35 @@ def find_note_height(img, df):
     print('Dataframe with notes')
     print(df)
     return df
+
+
+def find_notes_length(table, image_color):
+    """ This function find length for all found notes """
+
+    model = load_model('neuronet/notes_length.h5')
+
+    image_color = image_increase_height(image_color, 250)
+    image_gray = cv2.cvtColor(image_color, cv2.COLOR_BGR2GRAY)
+    notes = choose_notes(table, image_gray)
+    prediction = model.predict(notes)
+
+    all_length = []
+    for i in prediction:
+        maximum = 0
+        index = 0
+        for j in range(len(i)):
+            if i[j] > maximum:
+                maximum = i[j]
+                index = j
+        all_length.append(index)
+
+    index = 0
+    for i in range(table.shape[0]):
+        if table.symbol[i].startswith('note'):
+            if table.symbol[i] == 'note8' or table.symbol[i] == 'note4':
+                table.symbol[i] = note_durations[all_length[index]]
+            elif table.symbol[i] == 'note2':
+                table.symbol[i] = 'Half'
+            else:
+                table.symbol[i] = 'Whole'
+            index += 1

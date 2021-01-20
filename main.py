@@ -3,7 +3,7 @@ import cv2
 from midiutil.MidiFile import MIDIFile
 import subprocess
 from location import create_table
-from reading import find_note_height
+from reading import find_note_height, find_notes_length
 
 
 def open_file(path):
@@ -65,14 +65,24 @@ def to_midi(df):
     for i in range(df['x'].size):
         if df.loc[i, 'symbol'] != 'staff' and df.loc[i, 'symbol'] != 'sharp' and df.loc[i, 'symbol'] != 'flat':
             duration = 0
-            if df.loc[i, 'symbol'] == 'note1':
+            # if df.loc[i, 'symbol'] == 'note1':
+            if df.loc[i, 'symbol'] == 'Whole':
                 duration = 4
-            elif df.loc[i, 'symbol'] == 'note2':
+            # elif df.loc[i, 'symbol'] == 'note2':
+            elif df.loc[i, 'symbol'] == 'Half':
                 duration = 2
-            elif df.loc[i, 'symbol'] == 'note4':
+            # elif df.loc[i, 'symbol'] == 'note4':
+            elif df.loc[i, 'symbol'] == 'Dotted Quarter':
+                duration = 1.5
+            elif df.loc[i, 'symbol'] == 'Quarter':
                 duration = 1
-            elif df.loc[i, 'symbol'] == 'note8':
+            # elif df.loc[i, 'symbol'] == 'note8':
+            elif df.loc[i, 'symbol'] == 'Dotted Eighth':
+                duration = 0.75
+            elif df.loc[i, 'symbol'] == 'Eighth':
                 duration = 0.5
+            elif df.loc[i, 'symbol'] == '16th':
+                duration = 0.25
             elif df.loc[i, 'symbol'] == 'pause1':
                 duration = 4
             elif df.loc[i, 'symbol'] == 'pause2':
@@ -92,11 +102,12 @@ def to_midi(df):
 
 
 if __name__ == '__main__':
-    img_rgb = cv2.imread('samples/from_dataset.png')
+    img_rgb = cv2.imread('samples/picture_1.png')
 
     img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
     print(img_gray.shape)
 
-    notes_table = create_table(img_gray, img_rgb)
-    notes_table = find_note_height(img_rgb, notes_table)
+    notes_table = create_table(img_gray.copy(), img_rgb.copy())
+    notes_table = find_note_height(img_rgb.copy(), notes_table)
+    find_notes_length(notes_table, img_rgb.copy())
     to_midi(notes_table)
