@@ -92,7 +92,7 @@ def to_midi(df):
 
 
 if __name__ == '__main__':
-    img_rgb = cv2.imread('samples/from_dataset16.png')
+    img_rgb = cv2.imread('samples/from_dataset.png')
 
     img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
     print(img_gray.shape)
