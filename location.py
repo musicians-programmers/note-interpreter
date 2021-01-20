@@ -133,6 +133,10 @@ def create_table(gray_img, color_img, sub_path = ''):
                high_scale, 0.75, sub_path)  # 0.77 0.73 0.65 0,62 - лишние
     # find_scale(gray_img, 1, 35, 'note1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
     #            high_scale, 0.85, sub_path)  # 0.77 0.73 0.65 0,62 - лишние
+    find_scale(gray_img, 1, 36, 'note1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
+               high_scale, 0.75, sub_path)  # 0.77 0.73 0.65 0,62 - лишние
+    find_scale(gray_img, 1, 37, 'note1', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
+               high_scale, 0.75, sub_path)  # 0.77 0.73 0.65 0,62 - лишние
 
     # FLAT
     find_scale(gray_img, 2, 40, 'flat', x_coordinate, y_coordinate, widths, heights, type_of_symbol,
