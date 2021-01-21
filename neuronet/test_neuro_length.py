@@ -1,6 +1,6 @@
 import os
 
-from tensorflow.keras.models import load_model
+from tensorflow import keras
 import numpy as np
 
 from neuronet.neuro_notes_length import notes_from_image
@@ -9,7 +9,16 @@ from neuronet.neuro_notes_length import note_durations
 
 
 if __name__ == '__main__':
-    model = load_model('notes_length.h5')
+    model = keras.Sequential([
+        keras.layers.Flatten(input_shape=(250, 50)),
+        keras.layers.Dense(12500, activation='relu'),
+        keras.layers.Dense(1000, activation='relu'),
+        keras.layers.Dense(10, activation='softmax')
+    ])
+    model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
+    model.load_weights('notes_length.h5')
 
     path_to_dataset = '../datasets/made_from_primus_dataset/test/'
     directory = os.listdir(path_to_dataset)

@@ -68,9 +68,13 @@ def to_midi(df):
         if df.loc[i, 'symbol'] != 'staff' and df.loc[i, 'symbol'] != 'sharp' and df.loc[i, 'symbol'] != 'flat':
             duration = 0
             # if df.loc[i, 'symbol'] == 'note1':
-            if df.loc[i, 'symbol'] == 'Whole':
+            if df.loc[i, 'symbol'] == 'Dotted Whole':
+                duration = 6
+            elif df.loc[i, 'symbol'] == 'Whole':
                 duration = 4
             # elif df.loc[i, 'symbol'] == 'note2':
+            elif df.loc[i, 'symbol'] == 'Dotted Half':
+                duration = 3
             elif df.loc[i, 'symbol'] == 'Half':
                 duration = 2
             # elif df.loc[i, 'symbol'] == 'note4':

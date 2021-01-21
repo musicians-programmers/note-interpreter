@@ -49,7 +49,7 @@ def choose_notes(df, image):
         current_note = []
         for y in range(image.shape[0]):
             current_line = []
-            for x in range(note[0] + note[2] // 2 - 25, note[0] + note[2] // 2 + 41):
+            for x in range(note[0] + note[2] // 2 - 20, note[0] + note[2] // 2 + 30):
                 if x > image.shape[1] - 1:
                     current_line.append(255)
                 else:
@@ -105,8 +105,8 @@ note_durations = ['Whole',
 
 if __name__ == '__main__':
     model = keras.Sequential([
-        keras.layers.Flatten(input_shape=(250, 66)),
-        keras.layers.Dense(16500, activation='relu'),
+        keras.layers.Flatten(input_shape=(250, 50)),
+        keras.layers.Dense(12500, activation='relu'),
         keras.layers.Dense(1000, activation='relu'),
         keras.layers.Dense(10, activation='softmax')
     ])
