@@ -29,7 +29,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: note-interpreter-${{ matrix.os }}
-        path: dist/*
+        path: |
+          dist/*
+          templates/
+          neuronet/notes_length.h5
         
   
   tests:
