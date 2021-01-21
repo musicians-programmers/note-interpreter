@@ -1,9 +1,11 @@
+import os
+
 import cv2
 import numpy as np
-import os
-from tensorflow import keras
 from music21 import converter
 from music21.note import Note
+from tensorflow import keras
+
 from location import create_table
 
 

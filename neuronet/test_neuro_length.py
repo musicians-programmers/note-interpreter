@@ -1,9 +1,11 @@
+import os
+
 from tensorflow.keras.models import load_model
+import numpy as np
+
 from neuronet.neuro_notes_length import notes_from_image
 from neuronet.neuro_notes_length import notes_from_midi
 from neuronet.neuro_notes_length import note_durations
-import numpy as np
-import os
 
 
 if __name__ == '__main__':
@@ -51,7 +53,7 @@ if __name__ == '__main__':
     print("Total mistakes: {0}. Percent of right evaluations {1}%".format(mistakes,
           (len(notes_from_all_music_files) - mistakes) * 100 / len(notes_from_all_music_files)))
     for i in range(9):
-        print("Total {0}: {1}. Persent of right evaluations {2}%".format(
+        print("Total {0}: {1}. Percent of right evaluations {2}%".format(
             note_durations[i],
             notes_variants[i],
             (notes_variants[i] - notes_mistakes[i]) * 100 / notes_variants[i]

@@ -1,7 +1,9 @@
-from neuronet.neuro_notes_length import notes_from_image, notes_from_midi, note_durations
+import os
+
 from tensorflow import keras
 import numpy as np
-import os
+
+from neuronet.neuro_notes_length import notes_from_image, notes_from_midi, note_durations
 
 
 if __name__ == '__main__':

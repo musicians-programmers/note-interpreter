@@ -1,7 +1,9 @@
+import subprocess
 import sys
+
 import cv2
 from midiutil.MidiFile import MIDIFile
-import subprocess
+
 from location import create_table
 from reading import find_note_height, find_notes_length
 

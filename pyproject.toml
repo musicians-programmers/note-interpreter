@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "note-interpreter"
+version = "0.1.0"
+description = ""
+authors = ["ezuryy <daria.kidinova@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7.1"
+numpy = "^1.19.5"
+pandas = "^1.2.1"
+opencv-python = "^4.5.1"
+MIDIFile = "^0.1.0"
+music21 = "^6.5.0"
+tensorflow = "^2.4.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.8.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

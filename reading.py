@@ -1,7 +1,8 @@
 import cv2
 import pandas as pd
-from neuronet.neuro_notes_length import image_increase_height, choose_notes, note_durations
 from tensorflow.keras.models import load_model
+
+from neuronet.neuro_notes_length import image_increase_height, choose_notes, note_durations
 
 
 def find_note_height(img, df):

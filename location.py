@@ -1,6 +1,6 @@
+import cv2
 import numpy as np
 import pandas as pd
-import cv2
 
 
 def find_scale(image, count_of_iterations, offset, symbol_type, x_coordinate, y_coordinate, widths, heights,
@@ -73,7 +73,7 @@ def find_scale(image, count_of_iterations, offset, symbol_type, x_coordinate, y_
 #             symbol_types.append(symbol_type)
 
 
-def create_table(gray_img, color_img, sub_path = ''):
+def create_table(gray_img, color_img, sub_path=''):
     x_coordinate = []
     y_coordinate = []
     widths = []
@@ -85,8 +85,10 @@ def create_table(gray_img, color_img, sub_path = ''):
     low_scale = round(100 * scale - 5)
     high_scale = round(100 * scale + 5)
     # NOTE 4 OR NOTE 8
-    # find_scale(gray_img, 2, 0, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 150, 0.8, sub_path) #0.7
-    # find_scale(gray_img, 6, 10, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 150, 0.73, sub_path)
+    # find_scale(gray_img, 2, 0, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 150,
+    # 0.8, sub_path) #0.7
+    # find_scale(gray_img, 6, 10, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 150,
+    # 0.73, sub_path)
     find_scale(gray_img, 1, 11, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
                high_scale, 0.7, sub_path)  # 0.6
     find_scale(gray_img, 1, 14, 'note8/note4', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
@@ -169,11 +171,12 @@ def create_table(gray_img, color_img, sub_path = ''):
                high_scale, 0.9, sub_path)  # 0.85 0.88 0.878
 
     # PAUSE 2
-    # find_scale(gray_img, 1, 110, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 140, 0.65, sub_path) #0.65 в lost1 - лишние паузы
+    # find_scale(gray_img, 1, 110, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, 50, 140,
+    # 0.65, sub_path) #0.65 в lost1 - лишние паузы
     find_scale(gray_img, 1, 111, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
                high_scale, 0.8, sub_path)  # 0.8 0.7 0.75 0.768 0.79 - лишние
     find_scale(gray_img, 1, 112, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
-               high_scale, 0.8, sub_path) # 0.83
+               high_scale, 0.8, sub_path)  # 0.83
     # find_scale(gray_img, 1, 113, 'pause2', x_coordinate, y_coordinate, widths, heights, type_of_symbol, low_scale,
     #            high_scale, 0.8, sub_path)  # 0.83
 
