@@ -3,14 +3,14 @@ import os
 from tensorflow import keras
 import numpy as np
 
-from neuronet.neuro_notes_length import notes_from_image, notes_from_midi, note_durations
-
+from neuronet.neuro_notes_length import notes_from_image, note_durations
+from neuronet.midi_parsing import notes_from_midi
 
 if __name__ == '__main__':
     model = keras.Sequential([
-        keras.layers.Flatten(input_shape=(250, 66)),
-        keras.layers.Dense(16500, activation='relu'),
-        keras.layers.Dense(100, activation='relu'),
+        keras.layers.Flatten(input_shape=(250, 50)),
+        keras.layers.Dense(12500, activation='relu'),
+        keras.layers.Dense(1000, activation='relu'),
         keras.layers.Dense(10, activation='softmax')
     ])
 
@@ -36,6 +36,6 @@ if __name__ == '__main__':
 
     notes_from_all_pictures = np.array(notes_from_all_pictures) / 255.0
     notes_from_all_music_files = np.array(notes_from_all_music_files)
-    model.fit(notes_from_all_pictures, notes_from_all_music_files, epochs=5)
+    model.fit(notes_from_all_pictures, notes_from_all_music_files, epochs=100)
 
-    model.save('neuronet/notes_length.h5')
+    model.save_weights('notes_length.h5')

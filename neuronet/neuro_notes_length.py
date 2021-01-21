@@ -1,10 +1,5 @@
-import os
-
 import cv2
 import numpy as np
-from music21 import converter
-from music21.note import Note
-from tensorflow import keras
 
 from location import create_table
 
@@ -79,19 +74,6 @@ def notes_from_image(path):
     return np.array(notes)
 
 
-def notes_from_midi(path, durations):
-    """ This function return notes list from music """
-
-    midi = converter.parse(path)
-    notes = []
-    for element in midi.recurse():
-        if type(element) == Note:
-            notes.append([durations.index(element.duration.fullName)])
-
-    notes = np.array(notes, dtype=np.uint8)
-    return notes
-
-
 note_durations = ['Whole',
                   'Dotted Whole',
                   'Half',
@@ -102,37 +84,3 @@ note_durations = ['Whole',
                   'Dotted Eighth',
                   '16th',
                   'Dotted 16th']
-
-if __name__ == '__main__':
-    model = keras.Sequential([
-        keras.layers.Flatten(input_shape=(250, 50)),
-        keras.layers.Dense(12500, activation='relu'),
-        keras.layers.Dense(1000, activation='relu'),
-        keras.layers.Dense(10, activation='softmax')
-    ])
-
-    model.compile(optimizer='adam',
-                  loss='sparse_categorical_crossentropy',
-                  metrics=['accuracy'])
-
-    path_to_dataset = 'datasets/made_from_primus_dataset/train/'
-    directory = os.listdir(path_to_dataset)
-    notes_from_all_pictures = []
-    notes_from_all_music_files = []
-    index = 1
-    for subdir in directory:
-        print('File {0}'.format(index))
-        index += 1
-        notes_from_picture = notes_from_image(path_to_dataset + subdir + '/' + subdir + '.png')
-        notes_from_music = notes_from_midi(path_to_dataset + subdir + '/' + subdir + '.mid',
-                                           note_durations)
-        for pict_note in notes_from_picture:
-            notes_from_all_pictures.append(pict_note)
-        for music_note in notes_from_music:
-            notes_from_all_music_files.append(music_note)
-
-    notes_from_all_pictures = np.array(notes_from_all_pictures) / 255.0
-    notes_from_all_music_files = np.array(notes_from_all_music_files)
-    model.fit(notes_from_all_pictures, notes_from_all_music_files, epochs=100)
-
-    model.save('neuronet/notes_length.h5')
