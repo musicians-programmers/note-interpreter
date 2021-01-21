@@ -1,3 +1,5 @@
+import argparse
+import os.path
 import subprocess
 import sys
 
@@ -108,7 +110,17 @@ def to_midi(df):
 
 
 if __name__ == '__main__':
-    img_rgb = cv2.imread('samples/picture_1.png')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--file', dest='file')
+    parser.add_argument('--output', dest='output')
+    args = parser.parse_args()
+
+    if not args.file:
+        raise Exception("Incorrect using: no --file argument")
+    if not os.path.isfile(args.file):
+        raise Exception("Incorrect using: no such file: " + args.file)
+
+    img_rgb = cv2.imread(args.file)
 
     img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
     print(img_gray.shape)
