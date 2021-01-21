@@ -115,7 +115,7 @@ if __name__ == '__main__':
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
 
-    path_to_dataset = '../datasets/made_from_primus_dataset/train/'
+    path_to_dataset = 'datasets/made_from_primus_dataset/train/'
     directory = os.listdir(path_to_dataset)
     notes_from_all_pictures = []
     notes_from_all_music_files = []
@@ -135,4 +135,4 @@ if __name__ == '__main__':
     notes_from_all_music_files = np.array(notes_from_all_music_files)
     model.fit(notes_from_all_pictures, notes_from_all_music_files, epochs=100)
 
-    model.save('notes_length.h5')
+    model.save('neuronet/notes_length.h5')
