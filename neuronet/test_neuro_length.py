@@ -3,9 +3,8 @@ import os
 from tensorflow import keras
 import numpy as np
 
-from neuronet.neuro_notes_length import notes_from_image
-from neuronet.neuro_notes_length import notes_from_midi
-from neuronet.neuro_notes_length import note_durations
+from neuronet.neuro_notes_length import notes_from_image, note_durations
+from neuronet.midi_parsing import notes_from_midi
 
 
 if __name__ == '__main__':
