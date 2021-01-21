@@ -223,6 +223,14 @@ optional = false
 python-versions = ">=3.6, <4"
 
 [[package]]
+name = "midiutil"
+version = "1.2.1"
+description = "A pure python library for creating multi-track MIDI files"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "more-itertools"
 version = "8.6.0"
 description = "More routines for operating on iterables, beyond itertools"
@@ -560,7 +568,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.1"
-content-hash = "79d2b7b009250c60f3e8f5417cae349fe2366c21b4985691192ceefccc05fb8d"
+content-hash = "406cac97fe1af29c9ea84d7d575930c3ea34011786952663bc9e2674aedf1542"
 
 [metadata.files]
 absl-py = [
@@ -707,6 +715,9 @@ mccabe = [
 midifile = [
     {file = "MIDIFile-0.1.0-py3-none-any.whl", hash = "sha256:cb32e87adff9a0ca07fbbe59d2ecf8cacb9c932c7510b019430a87c25f224b12"},
     {file = "MIDIFile-0.1.0.tar.gz", hash = "sha256:8513a9e16cba0e37206136e31c52bd1ed58a6d65baa57b42aa94548deadaae98"},
+]
+midiutil = [
+    {file = "MIDIUtil-1.2.1.tar.gz", hash = "sha256:79fa983bd1efc60785f68a8fe78fa8f45b8d7ec5898bf7cb7f3f7f3336d6a90a"},
 ]
 more-itertools = [
     {file = "more-itertools-8.6.0.tar.gz", hash = "sha256:b3a9005928e5bed54076e6e549c792b306fddfe72b2d1d22dd63d42d5d3899cf"},
