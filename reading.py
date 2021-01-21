@@ -5,7 +5,9 @@ from tensorflow import keras
 from neuronet.neuro_notes_length import image_increase_height, choose_notes, note_durations
 
 
-def find_note_height(img, df):
+def find_note_height(df):
+    """ This function defines the pitch of a notes """
+
     height = 0
     y_start = 0
     df = df.drop(columns=['status'])
@@ -19,36 +21,26 @@ def find_note_height(img, df):
     step = height / 24
 
     middles = [middle]
-    for i in range(7):
+    for i in range(9):
         middles.append(middle + 2 * step * (i + 1))
         middles.append(middle - 2 * step * (i + 1))
-    print(len(middles))
-    middles.sort()
-    note_height = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-    note_meaning = ['H5', 'A5', 'G5', 'F5', 'E5', 'D5', 'C5', 'H4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4', 'H3']
-    note_for_midi = [83, 81, 79, 77, 76, 74, 72, 71, 69, 67, 65, 64, 62, 60, 59]
 
-    print(len(note_height))
+    middles.sort()
+    note_height = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+    note_meaning = ['D6', 'C6', 'H5', 'A5', 'G5', 'F5', 'E5', 'D5', 'C5', 'H4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4',
+                    'H3', 'A3', 'G3']
+    note_for_midi = [86, 84, 83, 81, 79, 77, 76, 74, 72, 71, 69, 67, 65, 64, 62, 60, 59, 57, 55]
+
     note_classifier = {'middles': middles, 'note_height': note_height, 'note_meaning': note_meaning,
                        'note_midi': note_for_midi}
 
-    # check is everything ok with notes height
-    # x = 500
-    # for i in range(len(middles)):
-    #     y = middles[i]
-    #     cv2.rectangle(img_rgb, (x + 20 * i, int(y - step)), (x + 20 * i + 10, int(y + step)), (0, 0, 150), 2)
-
-    # cv2.imwrite('result.png', img)
     classifier = pd.DataFrame(data=note_classifier)
-    print('Dataframe note classifier')
-    print(classifier)
+
     note_centers = []
     for ind in range(df['x'].size):
         center = df.loc[ind, 'y'] + df.loc[ind, 'height'] / 2
         note_centers.append(center)
     df['centers'] = note_centers
-    print('Dataframe with centers')
-    print(df)
 
     notes = []
     note_midi = []
@@ -70,11 +62,8 @@ def find_note_height(img, df):
             if flag == 0:
                 notes.append('not recognized')
                 note_midi.append(60)
-    print(len(notes))
     df['notes'] = notes
     df['notes_midi'] = note_midi
-    print('Dataframe with notes')
-    print(df)
     return df
 
 

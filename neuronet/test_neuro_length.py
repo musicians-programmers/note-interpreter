@@ -17,9 +17,9 @@ if __name__ == '__main__':
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
-    model.load_weights('notes_length.h5')
+    model.load_weights('neuronet/notes_length.h5')
 
-    path_to_dataset = '../datasets/made_from_primus_dataset/test/'
+    path_to_dataset = 'datasets/made_from_primus_dataset/test/'
     directory = os.listdir(path_to_dataset)
     notes_from_all_pictures = []
     notes_from_all_music_files = []

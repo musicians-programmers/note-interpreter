@@ -22,7 +22,7 @@ def search(array, elem):
     return False
 
 
-def to_midi(df):
+def to_midi(df, output_file_path):
     indexes_for_drop = df[df['symbol'] == 'staff'].index
     df.drop(indexes_for_drop, inplace=True)
     df = df.reset_index(drop=True)
@@ -103,29 +103,32 @@ def to_midi(df):
             midi.addNote(track, channel, pitch, time, duration, volume)
             time += duration
 
-    file = open("output.mid", 'wb')
+    file = open(output_file_path, 'wb')
     midi.writeFile(file)
     file.close()
-    open_file('output.mid')
+
+
+def main(input_file_path, output_file_path):
+    img_rgb = cv2.imread(str(input_file_path))
+
+    img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+
+    notes_table = create_table(img_gray.copy(), img_rgb.copy())
+    notes_table = find_note_height(notes_table)
+    find_notes_length(notes_table, img_rgb.copy())
+    to_midi(notes_table, output_file_path)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--file', dest='file')
-    parser.add_argument('--output', dest='output')
+    parser.add_argument('--output', dest='output', default='output.mid')
     args = parser.parse_args()
 
     if not args.file:
-        raise Exception("Incorrect using: no --file argument")
+        raise Exception('Incorrect using: no --file argument')
     if not os.path.isfile(args.file):
-        raise Exception("Incorrect using: no such file: " + args.file)
+        raise Exception('Incorrect using: no such file: ' + args.file)
 
-    img_rgb = cv2.imread(args.file)
-
-    img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-    print(img_gray.shape)
-
-    notes_table = create_table(img_gray.copy(), img_rgb.copy())
-    notes_table = find_note_height(img_rgb.copy(), notes_table)
-    find_notes_length(notes_table, img_rgb.copy())
-    to_midi(notes_table)
+    main(args.file, args.output)
+    open_file('output.mid')
