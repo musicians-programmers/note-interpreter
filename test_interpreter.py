@@ -4,7 +4,7 @@ import tempfile
 import pytest
 
 from main import main
-from neuronet.neuro_notes_length import notes_from_midi
+from neuronet.midi_parsing import notes_from_midi
 from neuronet.neuro_notes_length import note_durations
 
 
@@ -52,7 +52,7 @@ def test(input_file_path, expected_file_path):
         mistake_ratio = mistake_count / max_note_count
         print(f'Mistake ratio is {mistake_ratio:09.7}')
 
-        if mistake_ratio < NOTE_MISTAKE_THRESHOLD:
+        if (1 - mistake_ratio) < NOTE_MISTAKE_THRESHOLD:
             raise ValueError(
                 f'Mistake ratio {mistake_ratio:09.7} is lower then treshold'
             )

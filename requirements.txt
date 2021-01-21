@@ -4,3 +4,4 @@ numpy~=1.19.3
 tensorflow~=2.4.0
 music21~=6.3.0
 pandas~=1.1.5
+pytest~=6.2.1
