@@ -40,15 +40,26 @@ jobs:
           dist/*
           templates/
           neuronet/notes_length.h5
-    - name: Create GitHub release with artifacts
-      if: startsWith(github.ref, 'refs/tags/')
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/') && ${{ matrix.os }} == macos-latest
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }} for ${{ matrix.os }}
+        release_name: Release ${{ github.ref }}
         body: note-interpreter-${{ matrix.os }}
         draft: false
         prerelease: false
+    - name: Upload Release Asset
+      if: startsWith(github.ref, 'refs/tags/') && ${{ matrix.os }} != macos-latest
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: note-interpreter-${{ matrix.os }}
+        asset_name: note-interpreter-${{ matrix.os }}
+        asset_content_type: application/zip
