@@ -1,4 +1,5 @@
 # Курсовой проект по ТИМП
+![CI](https://github.com/musicians-programmers/note-interpreter/workflows/CI/badge.svg?branch=main)
 
 ## 1. Задача
 Разработать программу, способную распознавать печатную строку нот в скрипичном ключе с изображения
