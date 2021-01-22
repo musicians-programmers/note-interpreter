@@ -17,9 +17,9 @@ if __name__ == '__main__':
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
-    model.load_weights('neuronet/notes_length.h5')
+    model.load_weights('notes_length.h5')
 
-    path_to_dataset = 'datasets/made_from_primus_dataset/test/'
+    path_to_dataset = '../datasets/made_from_primus_dataset/test/'
     directory = os.listdir(path_to_dataset)
     notes_from_all_pictures = []
     notes_from_all_music_files = []
@@ -58,7 +58,7 @@ if __name__ == '__main__':
             mistakes += 1
             notes_mistakes[notes_from_all_music_files[i][0]] += 1
 
-    print("Total mistakes: {0}. Percent of right evaluations {1}%".format(mistakes,
+    print("Total notes: {0}. Percent of right evaluations {1}%".format(len(notes_from_all_music_files),
           (len(notes_from_all_music_files) - mistakes) * 100 / len(notes_from_all_music_files)))
     for i in range(9):
         print("Total {0}: {1}. Percent of right evaluations {2}%".format(

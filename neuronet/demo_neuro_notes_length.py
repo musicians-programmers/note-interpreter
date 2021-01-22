@@ -15,9 +15,9 @@ if __name__ == '__main__':
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
-    model.load_weights('neuronet/notes_length.h5')
+    model.load_weights('notes_length.h5')
 
-    notes = notes_from_image('samples/picture_1.png')  # path to picture with notes
+    notes = notes_from_image('../samples/picture_1.png')  # path to picture with notes
     prediction = model.predict(notes)
 
     for i in prediction:

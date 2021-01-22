@@ -18,7 +18,7 @@ if __name__ == '__main__':
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
 
-    path_to_dataset = 'datasets/made_from_primus_dataset/train/'
+    path_to_dataset = '../datasets/made_from_primus_dataset/train/'
     directory = os.listdir(path_to_dataset)
     notes_from_all_pictures = []
     notes_from_all_music_files = []

@@ -38,7 +38,6 @@ def choose_notes(df, image):
         if df.symbol[i].startswith('note'):
             notes.append(df.values[i][:4])
 
-    # differ = 0
     notes_images = []
     for note in notes:
         current_note = []
@@ -51,13 +50,8 @@ def choose_notes(df, image):
                     current_line.append(image[y][x])
             current_line = np.array(current_line, dtype=np.uint8)
             current_note.append(current_line)
-            # image[y][note[0] + note[2] // 2 - 25] = (255 - differ, 255, differ)
-            # image[y][note[0] + note[2] // 2 + 25] = (255 - differ, 255, differ)
         current_note = np.array(current_note)
         notes_images.append(current_note)
-        # differ += 80
-        # if differ == 320:
-        #     differ = 0
 
     notes_images = np.array(notes_images)
     return notes_images
