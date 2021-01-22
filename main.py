@@ -23,11 +23,11 @@ def search(array, elem):
 
 
 def to_midi(df, output_file_path):
+    """ This function creates music file """
+
     indexes_for_drop = df[df['symbol'] == 'staff'].index
     df.drop(indexes_for_drop, inplace=True)
     df = df.reset_index(drop=True)
-    print('Dataframe without staff')
-    print(df)
 
     midi = MIDIFile(1)
 
@@ -69,22 +69,18 @@ def to_midi(df, output_file_path):
     for i in range(df['x'].size):
         if df.loc[i, 'symbol'] != 'staff' and df.loc[i, 'symbol'] != 'sharp' and df.loc[i, 'symbol'] != 'flat':
             duration = 0
-            # if df.loc[i, 'symbol'] == 'note1':
             if df.loc[i, 'symbol'] == 'Dotted Whole':
                 duration = 6
             elif df.loc[i, 'symbol'] == 'Whole':
                 duration = 4
-            # elif df.loc[i, 'symbol'] == 'note2':
             elif df.loc[i, 'symbol'] == 'Dotted Half':
                 duration = 3
             elif df.loc[i, 'symbol'] == 'Half':
                 duration = 2
-            # elif df.loc[i, 'symbol'] == 'note4':
             elif df.loc[i, 'symbol'] == 'Dotted Quarter':
                 duration = 1.5
             elif df.loc[i, 'symbol'] == 'Quarter':
                 duration = 1
-            # elif df.loc[i, 'symbol'] == 'note8':
             elif df.loc[i, 'symbol'] == 'Dotted Eighth':
                 duration = 0.75
             elif df.loc[i, 'symbol'] == 'Eighth':
@@ -131,4 +127,4 @@ if __name__ == '__main__':
         raise Exception('Incorrect using: no such file: ' + args.file)
 
     main(args.file, args.output)
-    open_file('output.mid')
+    open_file(args.output)
