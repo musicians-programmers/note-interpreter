@@ -24,7 +24,7 @@ jobs:
     - name: Build and compile
       run: |
         pip install pyinstaller
-        pyinstaller -F main.py
+        pyinstaller -F -n note-interpreter main.py
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
